@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns="http://www.w3.org/1999/xhtml">
+    <meta charset="UTF-8">
+    <title>Car Price Prediction</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+
+</head>
+<body class="bg-dark">
+
+    <div class="container">
+        <input type="checkbox" id="flip">
+        <div class="cover">
+            <div class="front">
+                <img src="static/res/car.jpg" alt="">
+                <div class="text">
+                    <span class="text-1">Just One More Car <br> I Promise</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="forms">
+                <div class="form-content">
+                    <div class="login-form">
+                        <div class="title">Car Price Prediction</div>
+                        <form name="form1" method="post" action="#" accept-charset="utf-8">
+                            <div class="input-boxes">
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Enter the Registration Year:</b> </label><br>
+                                    <input required type="number" min="1900" class="form-control" id="reg_year" name="reg_year" placeholder="Enter the Registration Year ">
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Select the Registration Month:</b> </label><br>
+                                    <select required class="selectpicker form-control" id="reg_month" name="reg_month" >
+                                        {% for month in months %}
+                                        <option value="{{ month }}">{{ month }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Enter the Power of Car in PS:</b> </label><br>
+                                    <input required type="number" min="0" class="form-control" id="car_power" name="car_power" placeholder="Enter the Power of Car in PS ">
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Enter the Number of Kilometres that the car has travelled:</b> </label><br>
+                                    <input required type="number" min="0" class="form-control" id="kilo_driven" name="kilo_driven" placeholder="Enter the kilometres driven ">
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Select the Gear Box Type:</b> </label><br>
+                                    <input type="radio" id="gt_id1" name="gear_type" value="manual" checked> Manual &emsp;
+                                    <input type="radio" id="gt_id2" name="gear_type" value="automatic" > Automatic &emsp;
+                                    <input type="radio" id="gt_id3" name="gear_type" value="not-declared" > Not Declared
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Your Car is damaged or repaired:</b> </label><br>
+                                    <input type="radio" id="dr_id1" name="car_condition" value="Yes" > Yes &emsp;
+                                    <input type="radio" id="dr_id2" name="car_condition" value="No" checked> No &emsp;
+                                    <input type="radio" id="dr_id3" name="car_condition" value="not-declared" > Not Declared
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Select the Model Type:</b> </label><br>
+                                    <select required class="selectpicker form-control" id="model" name="model" required="1">
+                                        {% for model in models %}
+                                        <option value="{{ model }}">{{ model }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Select the Brand of the Car:</b> </label><br>
+                                    <select required class="selectpicker form-control" id="brand" name="brand" required="1">
+                                        {% for brand in brands %}
+                                        <option value="{{ brand }}">{{ brand }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Select the Fuel Type of Car:</b> </label><br>
+                                    <select required class="selectpicker form-control" id="fuel_type" name="fuel_type" required="1">
+                                        {% for fuel_type in fuel_types %}
+                                        <option value="{{ fuel_type }}">{{ fuel_type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <label><b>Select the Vehicle Type of Car:</b> </label><br>
+                                    <select required class="selectpicker form-control" id="veh_type" name="veh_type" required="1">
+                                        {% for veh_type in vehicle_types %}
+                                        <option value="{{ veh_type }}">{{ veh_type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-10 form-group" style="text-align: center">
+                                    <button class="btn btn-primary form-control" onclick="send_data()">Predict Price</button>
+                                </div>
+                                <div class="text sign-up-text">
+                                    <br> Go to HomePage :
+                                    <a href="{{url_for('index')}}">Click Here..</a>
+                                </div>
+                            </div>
+                        </form>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-12" style="text-align: center">
+                                <h4><span id="prediction"></span></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+    function form_handler(event) {
+        event.preventDefault();
+    }
+
+    function send_data()
+    {
+
+
+        if(document.forms["form1"]["reg_year"].value!="" &&
+            document.forms["form1"]["car_power"].value!="" && document.forms["form1"]["kilo_driven"].value!="")
+        {
+            document.querySelector('form').addEventListener('submit',form_handler);
+            var fd=new FormData(document.querySelector('form'));
+            var xhr= new XMLHttpRequest({mozSystem: true});
+
+            xhr.open('POST','/c_predict',true);
+            document.getElementById("prediction").innerHTML="Wait! Predicting Price.....";
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == XMLHttpRequest.DONE){
+                    document.getElementById("prediction").innerHTML=""+xhr.responseText;
+                }
+            };
+            xhr.onload= function(){};
+            xhr.send(fd);
+        }
+    }
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+</html>
